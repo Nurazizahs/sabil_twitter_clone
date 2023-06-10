@@ -98,5 +98,6 @@ Future<model.Account?> currentUser() => _authAPI.currentUserAccount();
     final document = await _userAPI.getUserData(uid);
     final updatedUser = UserModel.fromMap(document.data);
     return updatedUser;
+    
   }
 }

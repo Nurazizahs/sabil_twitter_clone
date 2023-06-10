@@ -87,5 +87,6 @@ class UserAPI implements IUserAPI {
       databaseId: AppwriteConstants.databaseId,
       collectionId: AppwriteConstants.usersCollection,
       documentId: uid);
+      
   }
 }
