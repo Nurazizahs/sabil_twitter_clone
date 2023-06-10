@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/apis/auth_api.dart';
@@ -12,7 +14,19 @@ final authControllerProvider =
   StateNotifierProvider<AuthController, bool>((ref) {
   return AuthController(
     authAPI: ref.watch(authAPIProvider),
+    UserAPI: ref.watch(userApiProvider),
   ); 
+});
+
+final currentUserDetailsProvider = FutureProvider ((ref) {
+  final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
+  final userDetails = ref.watch(userDetailsProvider(currentUserId));
+  return userDetails.value;
+});
+
+final userDetailsProvider = FutureProvider.family((ref, String uid) {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid);
 });
 
 final currentUserAccountProvider = FutureProvider((ref) {
@@ -22,7 +36,7 @@ final currentUserAccountProvider = FutureProvider((ref) {
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
-  AuthController({required AuthAPI authAPI})
+  AuthController({required AuthAPI authAPI, required UserAPI UserAPI})
       : _authAPI = authAPI,
         super(false);
   // state = isLoading
@@ -50,7 +64,7 @@ Future<model.Account?> currentUser() => _authAPI.currentUserAccount();
           following: const [],
           profilePic: '',
           bannerPic: '',
-          uid: '',
+          uid: r.$id,
           bio: '',
           isTwitterBlue: false,
         );
@@ -78,5 +92,11 @@ Future<model.Account?> currentUser() => _authAPI.currentUserAccount();
       (l) => showSnackbar(context, l.message),
       (r) => Navigator.push(context, HomeView.route()),
     );
+  }
+
+  Future<UserModel> getUserData(String uid) async {
+    final document = await _userAPI.getUserData(uid);
+    final updatedUser = UserModel.fromMap(document.data);
+    return updatedUser;
   }
 }
