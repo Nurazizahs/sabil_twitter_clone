@@ -1,9 +1,12 @@
- import 'package:flutter/material.dart';
+ import 'dart:io';
+
+import 'package:flutter/material.dart';
  import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:twitter_clone/common/common.dart';
 import 'package:twitter_clone/common/rounded_small_button.dart';
 import 'package:twitter_clone/constants/assets_constants.dart';
+import 'package:twitter_clone/core/core.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
@@ -20,11 +23,19 @@ import 'package:twitter_clone/theme/pallete.dart';
 
 class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   final tweetTextController = TextEditingController();
+  List<File> images = [];
+
   @override
   void dispose(){
     super.dispose();
     tweetTextController.dispose();
   }
+
+  void onPickImages() async{
+    await pickImages();
+    setState(() {});
+  }
+
    @override
   Widget build(BuildContext context){
     final currentUser = ref.watch(currentUserAccountProvider).value;
@@ -42,7 +53,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           backgroundColor: Pallete.blueColor,
           textColor: Pallete.whiteColor,
           ),
-        ],
+        ], 
       ), 
       body: currentUser == null
       ? const Loader()
@@ -75,6 +86,24 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
               ),
             ],
           ),
+         if (images.isNotEmpty)
+                      CarouselSlider(
+                        items: images.map(
+                          (file) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                              ),
+                              child: Image.file(file),
+                            );
+                          },
+                        ).toList(),
+                        options: CarouselOptions(
+                          height: 400,
+                          enableInfiniteScroll: false,
+                        ),
+                      ),
           ),
         ),
       bottomNavigationBar: Container(
@@ -94,7 +123,10 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                 left: 15,
                 right: 15,
               ),
-              child: SvgPicture.asset(AssetsConstants.galleryIcon),
+              child: GestureDetector(
+              onTap: onPickImages,
+              child: SvgPicture.asset(AssetsConstants.galleryIcon)
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0).copyWith(
@@ -112,6 +144,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
             ),
           ],
         ),
+       
       ),
       );
   }
