@@ -10,3 +10,9 @@ git push -u origin main
 git remote add origin https://github.com/Nurazizahs/sabil_twitter_clone.git
 git branch -M main
 git push -u origin main
+
+CARA UPDATE
+git add *
+git commit -m ""
+git push
+refresh
