@@ -85,7 +85,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                 ),
               ),
             ],
-          ),
+          );
          if (images.isNotEmpty)
                       CarouselSlider(
                         items: images.map(

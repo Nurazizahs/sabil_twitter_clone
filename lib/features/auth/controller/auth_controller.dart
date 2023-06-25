@@ -14,7 +14,7 @@ final authControllerProvider =
   StateNotifierProvider<AuthController, bool>((ref) {
   return AuthController(
     authAPI: ref.watch(authAPIProvider),
-    UserAPI: ref.watch(userApiProvider),
+    userAPI: ref.watch(userApiProvider),
   ); 
 });
 
@@ -36,8 +36,9 @@ final currentUserAccountProvider = FutureProvider((ref) {
 
 class AuthController extends StateNotifier<bool> {
   final AuthAPI _authAPI;
-  AuthController({required AuthAPI authAPI, required UserAPI UserAPI})
-      : _authAPI = authAPI,
+  final UserAPI _userAPI;
+  AuthController({required AuthAPI authAPI, required UserAPI userAPI})
+      : _authAPI = authAPI, _userAPI = userAPI,
         super(false);
   // state = isLoading
 
@@ -55,7 +56,7 @@ Future<model.Account?> currentUser() => _authAPI.currentUserAccount();
     );
     state = false;
     res.fold(
-      (l) => showSnackbar(context, l.message),
+      (l) => showSnackBar(context, l.message),
       (r) async {
         UserModel userModel = UserModel(
           email: email,
@@ -69,8 +70,8 @@ Future<model.Account?> currentUser() => _authAPI.currentUserAccount();
           isTwitterBlue: false,
         );
         final res2 = await _userAPI.saveUserData(userModel);
-        res2.fold((l) => showSnackbar(context, l.message), (r) {
-          showSnackbar(context, 'Accounted Created! Please Login');
+        res2.fold((l) => showSnackBar(context, l.message), (r) {
+          showSnackBar(context, 'Accounted Created! Please Login');
           Navigator.push(context, LoginView.route());
         });
       },
@@ -89,7 +90,7 @@ Future<model.Account?> currentUser() => _authAPI.currentUserAccount();
     );
     state = false;
     res.fold(
-      (l) => showSnackbar(context, l.message),
+      (l) => showSnackBar(context, l.message),
       (r) => Navigator.push(context, HomeView.route()),
     );
   }

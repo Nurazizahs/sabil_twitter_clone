@@ -21,7 +21,7 @@ abstract class IUserAPI {
 class UserAPI implements IUserAPI {
   final Databases _db;
   UserAPI({
-    required this._db,
+    required Databases db,
   }) : _db = db;
 
   @override
@@ -41,46 +41,48 @@ class UserAPI implements IUserAPI {
     }
   }
 
-  UserAPI copyWith({
-    Databases? _db,
-  }) {
-    return UserAPI(
-      _db: _db ?? this._db,
-    );
-  }
+//
+  // UserAPI copyWith({
+  //   Databases? db,
+  // }) {
+  //   return UserAPI(
+  //     db: _db ?? this._db,
+  //   );
+  // }
 
-  Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
+  // Map<String, dynamic> toMap() {
+  //   final result = <String, dynamic>{};
   
-    result.addAll({'_db': _db.toMap()});
+  //   result.addAll({'_db': _db.toMap()});
   
-    return result;
-  }
+  //   return result;
+  // }
 
-  factory UserAPI.fromMap(Map<String, dynamic> map) {
-    return UserAPI(
-      _db: Databases.fromMap(map['_db']),
-    );
-  }
+  // factory UserAPI.fromMap(Map<String, dynamic> map) {
+  //   return UserAPI(
+  //     _db: Databases.fromMap(map['_db']),
+  //   );
+  // }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
-  factory UserAPI.fromJson(String source) => UserAPI.fromMap(json.decode(source));
+  // factory UserAPI.fromJson(String source) => UserAPI.fromMap(json.decode(source));
 
-  @override
-  String toString() => 'UserAPI(_db: $_db)';
+  // @override
+  // String toString() => 'UserAPI(_db: $_db)';
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+  // @override
+  // bool operator ==(Object other) {
+  //   if (identical(this, other)) return true;
   
-    return other is UserAPI &&
-      other._db == _db;
-  }
+  //   return other is UserAPI &&
+  //     other._db == _db;
+  // }
 
-  @override
-  int get hashCode => _db.hashCode;
-  
+  // @override
+  // int get hashCode => _db.hashCode;
+  //
+
   @override
   Future<model.Document> getUserData(String uid) {
     return _db.getDocument(

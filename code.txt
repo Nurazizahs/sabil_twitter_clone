@@ -15,4 +15,4 @@ CARA UPDATE
 git add *
 git commit -m ""
 git push
-refresh
+refresh github
