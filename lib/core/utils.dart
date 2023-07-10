@@ -11,7 +11,7 @@ void showSnackBar(BuildContext context, String content) {
   );
 }
 
-String getNameFromEmail(String email){
+String getNameFromEmail(String email) {
   return email.split('@')[0];
 }
 
@@ -25,4 +25,13 @@ Future<List<File>> pickImages() async {
     }
   }
   return images;
+}
+
+Future<File?> pickImage() async {
+  final ImagePicker picker = ImagePicker();
+  final imageFile = await picker.pickImage(source: ImageSource.gallery);
+  if (imageFile != null) {
+    return File(imageFile.path);
+  }
+  return null;
 }

@@ -1,4 +1,4 @@
-package com.nas.twitter_clone
+package com.sabilproject.twitter_clone
 
 import io.flutter.embedding.android.FlutterActivity
 
